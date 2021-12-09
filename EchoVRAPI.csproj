@@ -4,6 +4,14 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Title>EchoVR API</Title>
+    <Description>C# Bindings for the EchoVR API</Description>
+    <PackageProjectUrl>https://github.com/NtsFranz/EchoVRAPI</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/NtsFranz/EchoVRAPI/blob/main/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/NtsFranz/EchoVRAPI</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>echo-vr</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
