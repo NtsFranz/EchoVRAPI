@@ -216,7 +216,7 @@ namespace EchoVRAPI
 			Frame newFrame = new Frame()
 			{
 				recorded_time = t,
-				
+
 				disc = Disc.Lerp(from.disc, to.disc, lerpValue),
 				sessionid = from.sessionid,
 				orange_points = from.orange_points,
@@ -261,7 +261,7 @@ namespace EchoVRAPI
 		}
 	}
 
-	internal static class Math2
+	public static class Math2
 	{
 		public static float Lerp(float from, float to, float t)
 		{
@@ -409,24 +409,24 @@ namespace EchoVRAPI
 			return v1 / v1.Length();
 		}
 
-		
+
 		/// <summary>
 		/// converts this quaternion to its forward vector
 		/// </summary>
 		public static Vector3 Forward(this Quaternion q)
 		{
-			return new Vector3(2 * (q.X * q.Z + q.W * q.Y), 2 * (q.Y * q.Z - q.W * q.X),
+			return new Vector3(
+				2 * (q.X * q.Z + q.W * q.Y), 
+				2 * (q.Y * q.Z - q.W * q.X),
 				1 - 2 * (q.X * q.X + q.Y * q.Y));
 		}
 
 		/// <summary>
 		/// converts this quaternion to its left vector
-		/// TODO this is wrong
 		/// </summary>
 		public static Vector3 Left(this Quaternion q)
 		{
-			return new Vector3(-1 + 2 * (q.Y * q.Y + q.Z * q.Z), -2 * (q.X * q.Z + q.W * q.Y),
-				2 * (q.X * q.Y - q.W * q.Z));
+			return Vector3.Cross(q.Up(), q.Forward());
 		}
 
 		/// <summary>
@@ -434,7 +434,9 @@ namespace EchoVRAPI
 		/// </summary>
 		public static Vector3 Up(this Quaternion q)
 		{
-			return new Vector3(2 * (q.X * q.Y - q.W * q.Z), 1 - 2 * (q.X * q.X + q.Z * q.Z),
+			return new Vector3(
+				2 * (q.X * q.Y - q.W * q.Z), 
+				1 - 2 * (q.X * q.X + q.Z * q.Z),
 				2 * (q.Y * q.Z + q.W * q.X));
 		}
 	}

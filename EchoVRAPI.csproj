@@ -12,6 +12,8 @@
     <RepositoryUrl>https://github.com/NtsFranz/EchoVRAPI</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>echo-vr</PackageTags>
+    <Authors>NtsFranz</Authors>
+    <PackageVersion>1.0.1</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
