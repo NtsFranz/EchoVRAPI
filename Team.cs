@@ -83,12 +83,14 @@ namespace EchoVRAPI
 				         to.players.Count > i)
 				{
 					// actually lerp the team
-					newTeam.players[i] = Player.Lerp(from.players[i], to.players[i], t);
+					newTeam.players.Add(Player.Lerp(from.players[i], to.players[i], t));
 				}
 			}
 
 			return newTeam;
 		}
 	}
+	
+	
 
 }

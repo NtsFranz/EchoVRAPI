@@ -29,7 +29,7 @@ namespace EchoVRAPI
 		/// <summary>
 		/// Application-scoped Oculus userid
 		/// </summary>
-		public ulong userid { get; set; }
+		public long userid { get; set; }
 
 		/// <summary>
 		/// Object describing a player's aggregated statistics throughout the match.
@@ -76,6 +76,16 @@ namespace EchoVRAPI
 		/// < X, Y, Z >
 		/// </summary>
 		public List<float> velocity { get; set; }
+		
+		/// <summary>
+		/// This is not from the api, but set afterwards in the temporal processing step
+		/// </summary>
+		[JsonIgnore]
+		public Vector3 playspacePosition = Vector3.Zero;
+		[JsonIgnore]
+		public float distanceGained = 0;
+		[JsonIgnore]
+		public Vector3 virtualPlayspacePosition = Vector3.Zero;
 
 
 		/// <summary>

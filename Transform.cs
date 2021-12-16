@@ -87,7 +87,7 @@ namespace EchoVRAPI
 			};
 
 			newTransform.Position = Vector3.Lerp(from.Position, to.Position, t);
-			newTransform.Rotation = Quaternion.Lerp(from.Rotation, to.Rotation, t);
+			newTransform.Rotation = Quaternion.Slerp(from.Rotation, to.Rotation, t);
 
 			return newTransform;
 		}

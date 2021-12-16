@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
+using System.Text;
 using Newtonsoft.Json;
 
 namespace EchoVRAPI
@@ -136,7 +136,7 @@ namespace EchoVRAPI
 		/// </summary>
 		/// <param name="userid"></param>
 		/// <returns></returns>
-		public Player GetPlayer(ulong userid)
+		public Player GetPlayer(long userid)
 		{
 			foreach (Team t in teams)
 			{
@@ -162,7 +162,7 @@ namespace EchoVRAPI
 			return null;
 		}
 
-		public Team GetTeam(ulong userid)
+		public Team GetTeam(long userid)
 		{
 			foreach (Team t in teams)
 			{
@@ -175,7 +175,7 @@ namespace EchoVRAPI
 			return null;
 		}
 
-		public Team.TeamColor GetTeamColor(ulong userid)
+		public Team.TeamColor GetTeamColor(long userid)
 		{
 			foreach (Team t in teams)
 			{
@@ -187,6 +187,16 @@ namespace EchoVRAPI
 
 			return Team.TeamColor.spectator;
 		}
+		
+		
+
+		public (Vector3, Quaternion) GetCameraTransform()
+		{
+			return (
+				player.vr_position.ToVector3(),
+				Math2.QuaternionLookRotation(player.vr_forward.ToVector3(), player.vr_up.ToVector3()) 
+			);
+		}
 
 		/// <summary>
 		/// ↔ Mixes the two frames with a linear interpolation based on t
@@ -196,7 +206,7 @@ namespace EchoVRAPI
 		/// <param name="to">The next frame</param>
 		/// <param name="t">The DateTime of the playhead</param>
 		/// <returns>A mix of the two frames</returns>
-		internal static Frame Lerp(Frame from, Frame to, DateTime t)
+		public static Frame Lerp(Frame from, Frame to, DateTime t)
 		{
 			if (from.recorded_time == to.recorded_time) return from;
 			if (from.recorded_time > to.recorded_time)
@@ -253,11 +263,85 @@ namespace EchoVRAPI
 				         to.teams.Count > i)
 				{
 					// actually lerp the team
-					newFrame.teams[i] = Team.Lerp(from.teams[i], to.teams[i], lerpValue);
+					newFrame.teams.Add(Team.Lerp(from.teams[i], to.teams[i], lerpValue));
 				}
 			}
 
 			return newFrame;
+		}
+		
+		
+		
+		public static Frame FromEchoReplayString(string line)
+		{
+			if (!string.IsNullOrEmpty(line))
+			{
+				string[] splitJSON = line.Split('\t');
+				string onlyJSON, onlyTime;
+				if (splitJSON.Length == 2)
+				{
+					onlyJSON = splitJSON[1];
+					onlyTime = splitJSON[0];
+				}
+				else
+				{
+					Console.WriteLine("Row doesn't include both a time and API JSON");
+					return null;
+				}
+
+				if (onlyTime.Length == 23 && onlyTime[13] == '.')
+				{
+					StringBuilder sb = new StringBuilder(onlyTime)
+					{
+						[13] = ':',
+						[16] = ':'
+					};
+					onlyTime = sb.ToString();
+				}
+			
+				if (!DateTime.TryParse(onlyTime, out DateTime frameTime))
+				{
+					Console.WriteLine($"Can't parse date: {onlyTime}");
+					return null;
+				}
+
+				// if this is actually valid arena data
+				if (onlyJSON.Length > 800)
+				{
+					return FromJSON(frameTime, onlyJSON);
+				}
+				else
+				{
+					Console.WriteLine("Row is not arena data.");
+					return null;
+				}
+			}
+			else
+			{
+				Console.WriteLine("String is empty");
+				return null;
+			}
+		}
+		
+		/// <summary>
+		/// Creates a frame from json and a timestamp
+		/// </summary>
+		/// <param name="time">The time the frame was recorded</param>
+		/// <param name="json">The json for the frame</param>
+		/// <returns>A Frame object</returns>
+		public static Frame FromJSON(DateTime time, string json)
+		{
+			if (string.IsNullOrEmpty(json)) return null;
+
+			try
+			{
+				Frame frame = JsonConvert.DeserializeObject<Frame>(json);
+				frame.recorded_time = time;
+				return frame;
+			} catch (JsonReaderException ex)
+			{
+				return null;
+			}
 		}
 	}
 
