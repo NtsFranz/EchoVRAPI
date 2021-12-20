@@ -21,7 +21,7 @@ namespace EchoVRAPI
 		}
 
 
-		public List<Player> players { get; set; }
+		public List<Player> players { get; set; } = new List<Player>();
 
 		/// <summary>
 		/// Team name

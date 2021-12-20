@@ -21,8 +21,10 @@ namespace EchoVRAPI
 	public class Frame
 	{
 		/// <summary>
-		/// This isn't in the api, just useful for recorded data
+		/// This isn't in the api, just useful for recorded data.
+		/// The time this frame was fetched from the API.
 		/// </summary>
+		[JsonIgnore]
 		public DateTime recorded_time { get; set; }
 
 		/// <summary>
@@ -270,8 +272,6 @@ namespace EchoVRAPI
 			return newFrame;
 		}
 		
-		
-		
 		public static Frame FromEchoReplayString(string line)
 		{
 			if (!string.IsNullOrEmpty(line))
@@ -338,7 +338,7 @@ namespace EchoVRAPI
 				Frame frame = JsonConvert.DeserializeObject<Frame>(json);
 				frame.recorded_time = time;
 				return frame;
-			} catch (JsonReaderException ex)
+			} catch (JsonReaderException)
 			{
 				return null;
 			}
@@ -437,7 +437,7 @@ namespace EchoVRAPI
 		{
 			if (input.Count != 3)
 			{
-				throw new Exception("Can't convert List to Vector3");
+				throw new Exception("Can't convert List to Vector3. There must be 3 elements.");
 			}
 
 			return new Vector3(input[0], input[1], input[2]);
@@ -447,7 +447,7 @@ namespace EchoVRAPI
 		{
 			if (input.Length != 3)
 			{
-				throw new Exception("Can't convert array to Vector3");
+				throw new Exception("Can't convert array to Vector3. There must be 3 elements.");
 			}
 
 			return new Vector3(input[0], input[1], input[2]);
