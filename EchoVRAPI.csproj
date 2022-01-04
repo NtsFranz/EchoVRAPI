@@ -13,7 +13,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>echo-vr</PackageTags>
     <Authors>NtsFranz</Authors>
-    <PackageVersion>1.0.3</PackageVersion>
+    <PackageVersion>1.0.6</PackageVersion>
     <LangVersion>9</LangVersion>
   </PropertyGroup>
 

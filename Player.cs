@@ -1,6 +1,10 @@
 using System.Collections.Generic;
-using System.Numerics;
 using Newtonsoft.Json;
+#if UNITY
+using UnityEngine;
+#else
+using System.Numerics;
+#endif
 
 namespace EchoVRAPI
 {
@@ -9,7 +13,7 @@ namespace EchoVRAPI
 	/// </summary>
 	public class Player
 	{
-		[JsonIgnore] public Team team { get; set; }
+		[JsonIgnore] public Team.TeamColor team_color;
 
 		/// <summary>
 		/// Right hand position and rotation
@@ -76,16 +80,23 @@ namespace EchoVRAPI
 		/// < X, Y, Z >
 		/// </summary>
 		public List<float> velocity { get; set; }
-		
+
 		/// <summary>
 		/// This is not from the api, but set afterwards in the temporal processing step
 		/// </summary>
-		[JsonIgnore]
-		public Vector3 playspacePosition = Vector3.Zero;
-		[JsonIgnore]
-		public float distanceGained = 0;
-		[JsonIgnore]
-		public Vector3 virtualPlayspacePosition = Vector3.Zero;
+		[JsonIgnore] public Vector3 playspacePosition =
+#if UNITY
+			Vector3.zero;
+#else
+			Vector3.Zero;
+#endif
+		[JsonIgnore] public float distanceGained = 0;
+		[JsonIgnore] public Vector3 virtualPlayspacePosition =
+#if UNITY
+			Vector3.zero;
+#else
+			Vector3.Zero;
+#endif
 
 
 		/// <summary>
@@ -116,9 +127,9 @@ namespace EchoVRAPI
 				invulnerable = from.invulnerable,
 				stunned = from.stunned,
 				velocity = Vector3.Lerp(from.velocity.ToVector3(), to.velocity.ToVector3(), t).ToFloatList(),
-				blocking = from.blocking
+				blocking = from.blocking,
+				team_color = from.team_color,
 			};
 		}
 	}
-
 }
