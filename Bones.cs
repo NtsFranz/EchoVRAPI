@@ -5,9 +5,14 @@ using System.Numerics;
 #endif
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EchoVRAPI
 {
+
+	/// <summary>
+	/// 🦴🦴🦴🦴
+	/// </summary>
 	[Serializable]
 	public class Bones
 	{
@@ -27,6 +32,9 @@ namespace EchoVRAPI
 		{
 			if (from == null) return to;
 			if (to == null) return from;
+
+			if (from.user_bones == null) return to;
+			if (to.user_bones == null) return from;
 			
 			t = Math2.Clamp01(t);
 
@@ -89,12 +97,12 @@ namespace EchoVRAPI
 
 		public Quaternion GetRotation(int index)
 		{
-			return new Quaternion(bone_o[index * 4], bone_o[index * 4 + 1], bone_o[index * 4 + 2], bone_o[index * 4 + 3]);
+			return bone_o.Skip(index * 4).Take(4).ToArray().ToQuaternion();
 		}
 
 		public Vector3 GetPosition(int index)
 		{
-			return new Vector3(bone_t[index * 3], bone_t[index * 3 + 1], bone_t[index * 3 + 2]);
+			return bone_t.Skip(index * 3).Take(3).ToArray().ToVector3();
 		}
 
 

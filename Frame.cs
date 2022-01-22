@@ -634,6 +634,21 @@ public static Quaternion QuaternionLookRotation(Vector3 forward, Vector3 up)
 #endif
 			};
 		}
+		
+		
+		public static Quaternion ToQuaternion(this float[] input)
+		{
+			if (input.Length != 4)
+			{
+				throw new Exception("Can't convert array to Vector3. There must be 3 elements.");
+			}
+
+			Quaternion q = new Quaternion(input[0], input[1], input[2], input[3]);
+#if UNITY
+			q = Quaternion.LookRotation(q.ForwardBackwards(), q.UpBackwards());
+#endif
+			return q;
+		}
 
 		public static float DistanceTo(this Vector3 v1, Vector3 v2)
 		{
