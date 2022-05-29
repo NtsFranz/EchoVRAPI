@@ -80,6 +80,8 @@ namespace EchoVRAPI
 		public Transform lhand { get; set; }
 
 		public bool blocking { get; set; }
+		
+		public bool is_emote_playing { get; set; }
 
 		/// <summary>
 		/// A 3 element list of floats representing the player's velocity.

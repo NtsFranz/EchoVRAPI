@@ -33,6 +33,12 @@ namespace EchoVRAPI
 		[JsonIgnore] public DateTime recorded_time;
 
 		/// <summary>
+		/// This isn't in the API, but can be used for a deterministic ordering of frames.
+		/// Should be unique for each frame as fetched from the API.
+		/// </summary>
+		[JsonIgnore] public long frame_index;
+
+		/// <summary>
 		/// This data is from a different API call, but can be combined here to make organization easier
 		/// </summary>
 		[JsonIgnore] public Bones bones;
@@ -66,7 +72,10 @@ namespace EchoVRAPI
 		/// </summary>
 		public float game_clock { get; set; }
 
-		[JsonIgnore] public bool InLobby => map_name == "mpl_lobby_b2";
+		[Obsolete("The lobby no longer returns API data, so this will never be true")]
+		[JsonIgnore]
+		public bool InLobby => map_name == "mpl_lobby_b2";
+
 		[JsonIgnore] public bool InArena => map_name == "mpl_arena_a";
 
 		private static readonly string[] combatMaps = new string[]
@@ -409,6 +418,39 @@ namespace EchoVRAPI
 			}
 
 			if (bones != null) f.bones = JsonConvert.DeserializeObject<Bones>(bones);
+
+			return f;
+		}
+
+
+		/// <summary>
+		/// Creates a completely empty frame, but initializes teams and stuff to avoid null checking
+		/// </summary>
+		/// <returns>A Frame object</returns>
+		public static Frame CreateEmptyFrame()
+		{
+			Frame f = new Frame
+			{
+				// label the team classes
+				teams = new List<Team>
+				{
+					new Team()
+					{
+						color = Team.TeamColor.blue,
+						players = new List<Player>()
+					},
+					new Team()
+					{
+						color = Team.TeamColor.orange,
+						players = new List<Player>()
+					},
+					new Team()
+					{
+						color = Team.TeamColor.spectator,
+						players = new List<Player>()
+					},
+				}
+			};
 
 			return f;
 		}
