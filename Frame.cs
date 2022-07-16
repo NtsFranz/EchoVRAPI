@@ -30,23 +30,26 @@ namespace EchoVRAPI
 		/// This isn't in the api, just useful for recorded data.
 		/// The time this frame was fetched from the API.
 		/// </summary>
-		[JsonIgnore] public DateTime recorded_time;
+		[JsonIgnore]
+		public DateTime recorded_time { get; set; }
 
 		/// <summary>
 		/// This isn't in the API, but can be used for a deterministic ordering of frames.
 		/// Should be unique for each frame as fetched from the API.
 		/// </summary>
-		[JsonIgnore] public long frame_index;
+		[JsonIgnore]
+		public long frame_index { get; set; }
 
 		/// <summary>
 		/// This data is from a different API call, but can be combined here to make organization easier
 		/// </summary>
-		[JsonIgnore] public Bones bones;
-		
+		[JsonIgnore]
+		public Bones bones { get; set; }
+
 		#region API Fields
 
-		public int err_code;
-		public string err_description;
+		public int err_code { get; set; }
+		public string err_description { get; set; }
 
 		/// <summary>
 		/// Disc object at the given instance.
@@ -56,7 +59,7 @@ namespace EchoVRAPI
 		public LastThrow last_throw { get; set; }
 		public string sessionid { get; set; }
 		public string sessionip { get; set; }
-		
+
 		public bool blue_team_restart_request { get; set; }
 		public bool orange_team_restart_request { get; set; }
 
@@ -76,12 +79,12 @@ namespace EchoVRAPI
 		/// </summary>
 		public string game_clock_display { get; set; }
 
-		[JsonIgnore]
-		public bool InLobby => map_name == "mpl_lobby_b2" || err_code == -6;
+		[JsonIgnore] public bool InLobby => map_name == "mpl_lobby_b2" || err_code == -6;
 
 		[JsonIgnore] public bool InArena => map_name == "mpl_arena_a";
 
-		private static readonly string[] combatMaps = {
+		private static readonly string[] combatMaps =
+		{
 			"mpl_combat_fission",
 			"mpl_combat_combustion",
 			"mpl_combat_dyson",
@@ -112,11 +115,12 @@ namespace EchoVRAPI
 		public bool right_shoulder_pressed { get; set; }
 		public bool left_shoulder_pressed2 { get; set; }
 		public bool right_shoulder_pressed2 { get; set; }
-		
+
 		/// <summary>
 		/// The username of the last user to change the private match rules. Default: "[INVALID]"
 		/// </summary>
 		public string rules_changed_by { get; set; }
+
 		/// <summary>
 		/// The frame number of the last time the private match rules were changed
 		/// </summary>
@@ -145,7 +149,7 @@ namespace EchoVRAPI
 		public float payload_speed { get; set; }
 
 		#endregion
-		
+
 		#endregion
 
 		[JsonIgnore]
@@ -321,14 +325,14 @@ namespace EchoVRAPI
 				blue_team_restart_request = from.blue_team_restart_request,
 				rules_changed_by = from.rules_changed_by,
 				rules_changed_at = from.rules_changed_at,
-				
+
 				contested = from.contested,
 				payload_multiplier = from.payload_multiplier,
 				payload_checkpoint = from.payload_checkpoint,
 				payload_distance = Math2.Lerp(from.payload_distance, to.payload_distance, lerpValue),
 				payload_defenders = from.payload_defenders,
 				payload_speed = from.payload_speed,
-				
+
 				err_code = from.err_code,
 				err_description = from.err_description,
 			};
@@ -467,28 +471,20 @@ namespace EchoVRAPI
 		/// Creates a completely empty frame, but initializes teams and stuff to avoid null checking
 		/// </summary>
 		/// <returns>A Frame object</returns>
-		public static Frame CreateEmptyFrame()
+		public static Frame CreateEmpty()
 		{
 			Frame f = new Frame
 			{
-				// label the team classes
+				disc = Disc.CreateEmpty(),
+				last_throw = new LastThrow(),
+				last_score = new LastScore(),
+				player = VRPlayer.CreateEmpty(),
+				pause = new Pause(),
 				teams = new List<Team>
 				{
-					new Team()
-					{
-						color = Team.TeamColor.blue,
-						players = new List<Player>()
-					},
-					new Team()
-					{
-						color = Team.TeamColor.orange,
-						players = new List<Player>()
-					},
-					new Team()
-					{
-						color = Team.TeamColor.spectator,
-						players = new List<Player>()
-					},
+					Team.CreateEmpty(Team.TeamColor.blue),
+					Team.CreateEmpty(Team.TeamColor.orange),
+					Team.CreateEmpty(Team.TeamColor.spectator),
 				}
 			};
 

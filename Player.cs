@@ -164,5 +164,50 @@ namespace EchoVRAPI
 				
 			};
 		}
+		
+		/// <summary>
+		/// Creates a completely empty player, but initializes stats and stuff to avoid null checking
+		/// </summary>
+		/// <returns>A Player object</returns>
+		public static Player CreateEmpty()
+		{
+			return new Player
+			{
+				head = new Transform
+				{
+					pos = new List<float>{0,0,0},
+					position = new List<float>{0,0,0},
+					forward = new List<float>{0,0,0},
+					left = new List<float>{0,0,0},
+					up = new List<float>{0,0,0},
+				},
+				body = new Transform
+				{
+					pos = new List<float>{0,0,0},
+					position = new List<float>{0,0,0},
+					forward = new List<float>{0,0,0},
+					left = new List<float>{0,0,0},
+					up = new List<float>{0,0,0},
+				},
+				lhand = new Transform
+				{
+					pos = new List<float>{0,0,0},
+					position = new List<float>{0,0,0},
+					forward = new List<float>{0,0,0},
+					left = new List<float>{0,0,0},
+					up = new List<float>{0,0,0},
+				},
+				rhand = new Transform
+				{
+					pos = new List<float>{0,0,0},
+					position = new List<float>{0,0,0},
+					forward = new List<float>{0,0,0},
+					left = new List<float>{0,0,0},
+					up = new List<float>{0,0,0},
+				},
+				velocity = new List<float> {0,0,0},
+				stats = new Stats(),
+			};
+		}
 	}
 }
